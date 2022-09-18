@@ -236,3 +236,130 @@ class Solution {
     }
 }
 ```
+```
+class Solution {
+    public int[] sumPrefixScores(String[] words) {
+        int n = words.length;
+        HashMap<Character, TrieNode> map = new HashMap<>();
+        for(int i = 0; i < n; i++){
+            String curr = words[i];
+            char start = curr.charAt(0);
+            if(!map.containsKey(start)){
+                TrieNode startNode = new TrieNode(start, 0);
+                map.put(start, startNode);
+            }
+            TrieNode prev = map.get(start);
+            prev.setVal(prev.getVal() + 1);
+            for(int j = 1; j < curr.length(); j++){
+                char c = curr.charAt(j);
+                HashMap<Character, TrieNode> children = prev.getChildren();
+                if(!children.containsKey(c)){
+                    TrieNode node = new TrieNode(c, 1);
+                    children.put(c, node);
+                }else{
+                    TrieNode temp = children.get(c);
+                    int val = temp.getVal();
+                    temp.setVal(val+1);
+                }
+                prev = children.get(c);
+            }
+        }
+        int[] result = new int[n];
+        for(int i = 0; i < n; i++){
+            TrieNode prev = map.get(words[i].charAt(0));
+            result[i] += prev.getVal();
+            for(int j = 1; j < words[i].length(); j++){
+                char curr = words[i].charAt(j);
+                TrieNode currNode = prev.getChildren().get(curr);
+                result[i] += currNode.getVal();
+                prev = currNode;
+            }
+        }
+        return result;
+    }
+}
+class TrieNode {
+    private char c;
+    private int val;
+    private HashMap<Character, TrieNode> children = new HashMap<>();
+    public TrieNode(char c, int val){
+        this.val = val;
+        this.c = c;
+    }
+    public HashMap<Character, TrieNode> getChildren(){
+        return children;
+    }
+    public void setChildren(HashMap<Character, TrieNode> children){
+        this.children = children;
+    }
+    public int getVal(){
+        return val;
+    }
+    public void setVal(int v){
+        this.val = v;
+    }
+}
+```
+```
+class Solution {
+    public TreeNode reverseOddLevels(TreeNode root) {
+        ArrayDeque<TreeNode> queue = new ArrayDeque<TreeNode>();
+        queue.addLast(root);
+        int level = 0;
+        while(!queue.isEmpty()){
+            int size = queue.size();
+            if(level % 2 == 0){
+                for(int i = 0; i < size; i++){
+                    TreeNode curr = queue.pollFirst();
+                    if(curr.left != null && curr.right != null){
+                        queue.addLast(curr.left);
+                        queue.addLast(curr.right);
+                    }
+                }
+            }else{
+                ArrayDeque<TreeNode> left = new ArrayDeque<TreeNode>();
+                ArrayDeque<TreeNode> right = new ArrayDeque<TreeNode>();
+                while(size > 0){
+                    TreeNode first = queue.pollFirst();
+                    TreeNode last = queue.pollLast();
+                    int temp = first.val;
+                    first.val = last.val;
+                    last.val = temp;
+                    if(first.left != null && first.right != null){
+                        left.addLast(first.left);
+                        left.addLast(first.right);
+                    }
+                    if(last.left != null && last.right != null){
+                        right.addFirst(last.right);
+                        right.addFirst(last.left);
+                    }
+                    size -= 2;
+                }
+                queue.addAll(left);
+                queue.addAll(right);
+            }
+            level++;
+        }
+        return root;
+    }
+}
+```
+```
+class Solution {
+    public int longestContinuousSubstring(String s) {
+        int n = s.length();
+        int[] dp = new int[n];
+        Arrays.fill(dp, 1);
+        int result = 1;
+        for(int i = 1; i < n; i++){
+            int curr = s.charAt(i) - 97;
+            int prev = s.charAt(i-1) - 97;
+            if(curr == prev + 1){
+                dp[i] = dp[i-1] + 1;
+            }
+            result = Math.max(result, dp[i]);
+        }
+        return result;
+    }
+}
+```
