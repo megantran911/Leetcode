@@ -49,7 +49,7 @@ public class DoordashOA {
         int result = diff[left]; //Increase the foundation
         int level = diff[left];
         //Check how many times we have to increase the left
-        for(int i = left - 1; i >= 0 && i < n; i--){
+        for(int i = left - 1; i >= 0; i--){
             result += diff[i] - level;
             level = diff[i];
         }
@@ -67,8 +67,8 @@ public class DoordashOA {
         int[] r1 = {5,4,3,2,1};
         int[] r2 = {1,2,3,4,5};
         System.out.println(getMaximumRewardPoints(n, r1, r2, k));
-        int[] source = {0,1,1,1,1,2};
-        int[] target = {2,2,2,1,1,3};
+        int[] source = {1};
+        int[] target = {2};
         System.out.println(getMinOperations(source.length, source, target));
     }
 }
